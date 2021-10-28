@@ -1,15 +1,33 @@
 require('dotenv').config()
 
+const path = require('path')
+
 const express = require('express')
 
 const app = express()
 
+app.use(express.json())
+
+app.use(express.static(path.join(__dirname, 'client/build')))
+
 const PORT = process.env.PORT || 5000
 
-app.get('/', (req, res) => {
-  res.send(`
-    <h1>Web ${process.env.COHORT} rocks!</h1>
-  `)
+// app.get('/', (req, res) => {
+//   res.send(`
+//     <h1>Web ${process.env.COHORT} rocks!</h1>
+//   `)
+// })
+
+// app.get('/port', (req, res) => {
+//   res.send(`<div>port is ${PORT}</div>`)
+// })
+
+app.get('/api/foo', (req, res) => {
+  res.json({ message: 'Hello there!'})
+})
+
+app.get('*', (req, res) => {
+  res.sendFile(path.join(__dirname, 'client/build', 'index.html'))
 })
 
 app.listen(PORT, () => {
